@@ -75,6 +75,21 @@ angular.module('timegrouperApp')
 
                 }, true);
 
+                scope.$watch('selectednames', function(newVals, oldVals) {
+
+                    if (!newVals) {
+
+                        return;
+                    } else if (newVals.length === 1) {
+
+                        return;
+                    } 
+
+
+                    renderDataChange(scope.similarity, scope.orderlist);
+
+                }, true);
+
                 // scope.$watch(function() {
                 //     return angular.element(window)[0].innerWidth;
                 // }, function() {
@@ -85,6 +100,24 @@ angular.module('timegrouperApp')
 
                 function renderDataChange(simMat, orderList) {
 
+                    // var highlightInfo;
+
+                    // if (scope.selectednames) {
+
+                    //     highlightInfo = scope.selectednames.map(checkHighlight);
+
+                    // }
+
+                    function checkHighlight(patchName) {
+
+                        var patch = scope.labelinfo.filter(function(d) {
+                            return d.name === patchName.name;
+                        });
+
+                        return scope.highlight[patch[0].app];
+                    }
+
+
                     x = d3.scale.ordinal().rangeBands([0, width]);
                     z = d3.scale.linear().domain([0, 4]).clamp(true);
                     // color = d3.scale.linear().range([d3.hsl(0,1,.5), d3.hsl(359,1,.5)]);
@@ -93,6 +126,8 @@ angular.module('timegrouperApp')
                             return h.z;
                         });
                     });
+
+
 
                     var min = d3.min(simMat, function(d) {
                         return d3.min(d, function(h) {
@@ -175,7 +210,8 @@ angular.module('timegrouperApp')
                         .classed('patchtext', true)
                         .attr("text-anchor", "end")
                         .text(function(d, i) {
-                            return nodes[i].name;
+                            // return nodes[i].name;
+                            return '';
                         });
 
                     var column = svg.selectAll(".column")
@@ -196,10 +232,12 @@ angular.module('timegrouperApp')
                         .classed('patchtext', true)
                         .attr("text-anchor", "start")
                         .text(function(d, i) {
-                            return nodes[i].name;
+                            // return nodes[i].name;
+                            return '';
                         });
 
-                    drawHeatMapLegends();
+                    // drawHeatMapLegends();
+
 
                     function row(row) {
                         var cell = d3.select(this).selectAll(".cell")
@@ -208,7 +246,24 @@ angular.module('timegrouperApp')
                             // }))
                             .data(row)
                             .enter().append("rect")
-                            .attr("class", "cell")
+                            .attr("class", function(d, i) {
+
+                                if (!scope.selectednames || scope.selectednames.length === 0) {
+                                    return 'cell';
+                                } else {
+
+                                    var base = 'cell selecting';
+
+                                    if (typeof scope.selectednames.indexOf === "function") {
+
+                                        if (scope.selectednames.indexOf((scope.orderlist[d.x]).name) !== -1 && scope.selectednames.indexOf((scope.orderlist[d.y]).name) !== -1) {
+
+                                            base = base + '  selected';
+                                        }
+                                    }
+                                    return base;
+                                }
+                            })
                             .attr("x", function(d) {
                                 return x(d.x);
                             })
@@ -274,7 +329,7 @@ angular.module('timegrouperApp')
                         d3.selectAll('.cell').classed("selecting", !d3.event.target.empty());
                         var extent0 = brush.extent(),
                             extent1;
-                        var selectedNames = [];
+                        var selectedNames = ['none'];
 
                         var selectedX = [];
                         var selectedY = [];
@@ -340,12 +395,12 @@ angular.module('timegrouperApp')
                     var g = svg.append("g")
                         .attr("class", "legend");
 
-                     g.append("text")
+                    g.append("text")
                         .attr("x", -100)
                         .attr("y", 15)
                         .attr("dy", ".35em")
                         .style("text-anchor", "left")
-                        .text("more similar (" +  d3.round(colorDomain[0],1) + ")")
+                        .text("more similar (" + d3.round(colorDomain[0], 1) + ")")
                         .attr('transform', function(d, i) { // NEW
                             var vert = yScaleForHeatMap(values[0]); // NEW
                             var horz = width + widthHeatMap + 5; // NEW
@@ -357,9 +412,9 @@ angular.module('timegrouperApp')
                         .attr("y", 15)
                         .attr("dy", ".35em")
                         .style("text-anchor", "left")
-                        .text("less similar (" + d3.round(colorDomain[2],1) + ")")
+                        .text("less similar (" + d3.round(colorDomain[2], 1) + ")")
                         .attr('transform', function(d, i) { // NEW
-                            var vert = yScaleForHeatMap(values[values.length-1]); // NEW
+                            var vert = yScaleForHeatMap(values[values.length - 1]); // NEW
                             var horz = width + widthHeatMap + 5; // NEW
                             return 'translate(' + horz + ',' + vert + ')rotate(-90)'; // NEW
                         });
@@ -374,7 +429,7 @@ angular.module('timegrouperApp')
                         .attr("height", 1)
                         .style("fill", color);
 
-                   
+
 
                 };
 

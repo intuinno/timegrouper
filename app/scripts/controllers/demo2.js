@@ -8,7 +8,7 @@
  * Controller of the timegrouperApp
  */
 angular.module('timegrouperApp')
-    .controller('Demo2Ctrl', function($scope, $http) {
+    .controller('Demo2Ctrl', function($scope, $http, $firebaseObject, $firebaseArray, $location, $routeParams, $q, FBURL) {
 
         var summaryMatLabel, summaryMat, originalLabel, originalMat;
         $scope.summaryRange = [];
@@ -352,7 +352,7 @@ angular.module('timegrouperApp')
             chart: {
                 type: 'lineWithFocusChart',
                 height: 450,
-                width:720,
+                width: 720,
                 margin: {
                     top: 20,
                     right: 20,
@@ -490,19 +490,22 @@ angular.module('timegrouperApp')
 
             var selectedPatches = [];
 
-            if (!newVals || newVals.length === 0) {
+            if (!newVals || newVals.length === 1) {
                 return;
             }
 
             for (var i = 0; i < newVals.length; i++) {
                 var j = parseInt(newVals[i].slice(5));
-                var patches = summaryMatLabel[j].patches;
-                for (var k = 0; k < patches.length; k++) {
 
-                    if (selectedPatches.indexOf(patches[k]) === -1) {
+                if (!isNaN(j)) {
+                    var patches = summaryMatLabel[j].patches;
+                    for (var k = 0; k < patches.length; k++) {
 
-                        selectedPatches.push(patches[k]);
+                        if (selectedPatches.indexOf(patches[k]) === -1) {
 
+                            selectedPatches.push(patches[k]);
+
+                        }
                     }
                 }
 
@@ -510,7 +513,7 @@ angular.module('timegrouperApp')
 
 
 
-            console.log(selectedPatches);
+            // console.log(selectedPatches);
 
             function isSelectedPatches(d, i) {
                 if (selectedPatches.indexOf(originalLabel[i].name) === -1) {
@@ -526,7 +529,7 @@ angular.module('timegrouperApp')
                 return d.filter(isSelectedPatches);
             });
 
-            console.log(filteredMat);
+            // console.log(filteredMat);
 
             var data = filteredMat.map(function(row, i) {
                 return row.map(function(value, j) {
@@ -644,6 +647,148 @@ angular.module('timegrouperApp')
                 d.selected = false;
             });
         };
+
+
+
+        var sessionID;
+        $scope.selectedGroups = ['none'];
+
+
+        $scope.launchSession = function(handler) {
+
+            if (!sessionID) {
+
+                var promise = createSession();
+
+                promise.then(function(newSessionID) {
+
+                        handler(newSessionID);
+                    },
+                    function(reason) {
+
+                        alert('Failed' + reason);
+                    });
+            } else {
+
+                handler(sessionID);
+
+            }
+
+
+        };
+
+        var handleSession = function() {
+
+            var locationSearch = $location.search();
+
+            if (locationSearch.session) {
+
+
+                var sessionArray = $firebaseArray(new Firebase(FBURL + '/sessions/summary'));
+
+                sessionArray.$bindTo($scope, 'selectedGroups');
+
+                sessionID = locationSearch.session;
+
+            }
+
+
+
+        };
+
+        $scope.openNewWindow = function(sessionID) {
+
+            var url = '#/summary/';
+            url = url + '?session=';
+            url = url + sessionID;
+
+            window.open(url, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=800, left=500, width=800, height=600");
+
+        };
+
+        $scope.openNewInspector = function(sessionID) {
+
+            var url = '#/inspect/' + $routeParams.csvKey;
+            url = url + '?session=';
+            url = url + sessionID;
+
+            window.open(url, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=800, height=800");
+
+        };
+
+        $scope.openNewQR = function(sessionID) {
+
+            var url = $location.absUrl();
+
+            $scope.qrcodeURL = url;
+            $scope.isQRcodeVisible = true;
+
+        };
+
+        function createSession() {
+
+            return $q(function(resolve, reject) {
+
+                var emptyDimsum = {
+                    summarySelection: [-1],
+                    dummy: 1,
+                    simSelection: [],
+                    summaryMat: [-1],
+                    orderlist: [-1]
+                }
+
+                var ref = new Firebase(FBURL + '/sessions/');
+                var sync = $firebaseArray(ref);
+
+                sync.$add(emptyDimsum).then(function(newChildRef) {
+                    console.log("added record with id " + newChildRef.key());
+
+                    var parentObj = $firebaseObject(newChildRef);
+
+                    parentObj.$loaded().then(function() {
+
+                        parentObj.summarySelection = $scope.selectedGroups;
+                        parentObj.summaryMat = $scope.summaryMatrix;
+                        parentObj.orderlist = $scope.summaryOrderList;
+
+                        parentObj.$save().then(function(newChildRef) {
+
+                            var obj = $firebaseObject(newChildRef.child('summarySelection'));
+                            obj.$bindTo($scope, "selectedGroups");
+
+                            var objSumMat = $firebaseArray(newChildRef.child('summaryMat'));
+                            // objSumMat.$bindTo($scope, "summaryMatrix");
+
+                            var objOrderList = $firebaseArray(newChildRef.child('orderlist'));
+                            // objOrderList.$bindTo($scope, "summaryOrderList");
+
+                            $location.search({
+                                session: newChildRef.key()
+                            });
+
+                            sessionID = newChildRef.key();
+
+                            resolve(newChildRef.key());
+
+
+
+                        });
+
+
+
+                    });
+
+
+
+                }, function(reason) {
+
+                    reject(reason);
+                });
+
+            });
+
+        };
+
 
 
     });

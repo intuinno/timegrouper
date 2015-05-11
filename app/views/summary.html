@@ -1,0 +1,18 @@
+2. Summary Matrix 
+<img id="imgHelpSummary" src="images/help.png" alt="summary matrix tooltip" onclick="showToolTip('The summary matrix shows an overview of the similarity matrix. Select a region of interest to generate the detailed similarity matrix and proceed to step 3.');" />
+</h3>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
+        <div ng-show='isQRcodeVisible'>
+            QR code for the linked window
+            <br>
+            <a href={{qrcodeURL}}>{{qrcodeURL}}</a>
+            <br>
+            <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeURL}} href={{qrcodeURL}}></qrcode>
+        </div>
+        <div summarymatrix class="overview" similarity="summaryMatrix" orderlist="summaryOrderList" selectednames="selectedGroups" myorder='summaryOrder' selectedrange='summaryRange'></div>
+        <div ng-show='noSummary'>
+            Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
+        </div>
+        <h3>

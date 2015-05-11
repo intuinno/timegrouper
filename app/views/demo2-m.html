@@ -1,240 +1,250 @@
 <style type="text/css">
-	.container {
-		width: 100%;
-		max-width: 10000px !important;
-	}
-	.divCheckboxes label {
-		display: block;
-	}
-	#divContainer {
-		margin: 0xp auto;
-	}
-	
-	#projectTitle {
-		color: #ff7200;
-		text-align: center;
-	}
-	
-	.center {
-		text-align: center;	
-	}
-	
-	.hide {
-		display: none;
-	}
-	
-	.linkDividers {
-		margin: 0px 20px;	
-	}
-	
-	td {
-		vertical-align: top;
-	}
-	
-	h3 {
-		vertical-align: middle;
-	}
-	
-	#tblFilter td {
-		padding-right: 50px;
-	}
-	
-	.button {
-		font-weight: bold;
-		padding: 10px;
-		width: 100%;
-	}
-	
-	#divDataFiltersAndAbout {
-		float: left;
-		width: 28%;
-	}
-	
-	#divDataFilters {
-		border: 1px solid #000;
-		padding: 0px 10px 10px 10px;
-	}
-	
-	#divAbout {
-		background-color: #444;
-		border: 1px solid #000;
-		border-radius: 7px;
-		color: #fff;
-		padding: 0px 10px 10px 10px;
-	}
-	
-	#divAbout a:link,
-	#divAbout a:visited {
-		color: #fff;
-		font-size: 120%;
-		font-weight: bold;
-		text-decoration: none;
-	}
-	
-	#divAbout a:hover,
-	#divAbout a:active {
-		color: #888;
-	}
-	
-	#divCharts {
-		margin-left: 30%;
-		min-height: 500px;
-		padding: 0px 10px 10px 10px;
-		width: 68%;;
-	}
-	
-	#divTSFilter {
-		padding: 10px;
-	}
+.container {
+    width: 100%;
+    max-width: 10000px !important;
+}
+
+.divCheckboxes label {
+    display: block;
+}
+
+#divContainer {
+    margin: 0xp auto;
+}
+
+#projectTitle {
+    color: #ff7200;
+    text-align: center;
+}
+
+.center {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.linkDividers {
+    margin: 0px 20px;
+}
+
+td {
+    vertical-align: top;
+}
+
+h3 {
+    vertical-align: middle;
+}
+
+#tblFilter td {
+    padding-right: 50px;
+}
+
+.button {
+    font-weight: bold;
+    padding: 10px;
+    width: 100%;
+}
+
+#divDataFiltersAndAbout {
+    float: left;
+    width: 28%;
+}
+
+#divDataFilters {
+    border: 1px solid #000;
+    padding: 0px 10px 10px 10px;
+}
+
+#divAbout {
+    background-color: #444;
+    border: 1px solid #000;
+    border-radius: 7px;
+    color: #fff;
+    padding: 0px 10px 10px 10px;
+}
+
+#divAbout a:link,
+#divAbout a:visited {
+    color: #fff;
+    font-size: 120%;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#divAbout a:hover,
+#divAbout a:active {
+    color: #888;
+}
+
+#divCharts {
+    margin-left: 30%;
+    min-height: 500px;
+    padding: 0px 10px 10px 10px;
+    width: 68%;
+    ;
+}
+
+#divTSFilter {
+    padding: 10px;
+}
 </style>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
-
 <script type="text/javascript">
-	
-	function showToolTip(message) {
-		$( "#helpDialog" ).dialog();
-		$("#helpDialog").text(message);
-	}
+function showToolTip(message) {
+    $("#helpDialog").dialog();
+    $("#helpDialog").text(message);
+}
 </script>
-
 <div id="divContainer">
-
-<div id="helpDialog" title="Tool Tip" class="hide">This is a tool tip</div>
-
-<div id="divAbout">
-<h1 id="projectTitle">Time Grouper</h1>
-<p>Time series data has become of increasing interest, and is valuable mainly for reasoning about trends in whatever data dimension the time series is tracking the changes of over time. TimeGrouper is a visualization tool for time series clustering. It leverages machine learning techniques in order to cluster and visualize large datasets of small time series data, based on their trends, or features. More specifically, we have developed this tool in the context of searching for the contributing factors to the global decay rate of security vulnerabilities.</p>
-
-<p>To begin, get the similarity data by selecting a similarity metric and clustering method and selecting additional filters (step 1). In the summary matrix, select a region of interest to generate a detailed similarity matrix (step 2). In the similarity matrix, select a region of interest to generate a time series chart (step 3). Finally, you can analyze the time series by zooming and panning and by applying filters to the chart (step 4).</p>
-
-<div class="center">
-<a href="https://wiki.cs.umd.edu/cmsc734_s15/index.php/TimeGrouper:_Visualizing_the_Global_Decay_of_Vulnerabilities">Project Wiki</a>
-<span class="linkDividers"> | </span>
-<a href="https://wiki.cs.umd.edu/cmsc734_s15/images/5/59/Timegrouper-visualizing-time.pdf">Report</a>
-<span class="linkDividers"> | </span>
-<a href="https://www.youtube.com/watch?v=oDgl6pp1CVU&feature=youtu.be">Video Demo</a>
-</div><!-- end center -->
-</div>
-
-<br />
-
-<div ng-show='isLoading'>
-    Loading {{loading}} / {{maxLoading}}
-    <progressbar value='loading' max='15'> </progressbar>
-</div>
-
-<div id="divDataFiltersAndAbout">
-<div id="divDataFilters">
-<h3> 1. Get the similarity data </h3>
-
-
-<label><strong>Similarity Metric</strong>:<br />
-    <select ng-model="simMetric" ng-options="s as s.name for s in simMetrics">
-    </select>
-</label>
-{{simMetric.detail}}<!-- TODO: I think we should remove this -->
-<br/><br />
-
-<label><strong>Clustering Method</strong>:<br />
-    <select ng-model="algorithm" ng-options="a as a.name for a in algorithms">
-    </select> 
-</label>{{algorithm.detail}}
-<br/><br />
-
-	<table id="tblFilters">
-    	<tr>
-        	<td rowspan="2">
-            	<strong>Applications</strong>:<br />
-				<a href="" class="btn btn-link btn-default" ng-click="selectAllAppNames()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNames()">None</a><br />
-                <div class="divCheckboxes">
-                    <label ng-repeat='(appName,enabled) in appNames'>
-                        <input type="checkbox" ng-model='appNames[appName]' /> {{appName}}
-                    </label>
-                </div>
-            </td>
-        	<td>
-            	<strong>Update Mechanism</strong>:<br />
-				<a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanisms()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanisms()">None</a><br />
-                <div class="divCheckboxes">
-                    <label ng-repeat='updateMechanism in updateMechanisms'>
-                        <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
-                    </label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            	<strong>Exploitable</strong>:<br />
-                <label><input type="radio" ng-model='exploitableOnly' ng-value="false" /> All</label><br/>
-                <label><input type="radio" ng-model='exploitableOnly' ng-value="true" /> Only exploitable</label>
-            </td>
-        </tr>
-    </table>
-    <br/>
-    
-    <button ng-click="loadData()" class="button">
-        Get Similarity Data and Generate Summary Matrix
-    </button>
-</div><!-- end divDataFilters -->
-</div><!-- end divDataFiltersAndAbout -->
-
-
-<div id="divCharts">
-<h3>
+    <div id="helpDialog" title="Tool Tip" class="hide">This is a tool tip</div>
+    <div id="divAbout">
+        <h1 id="projectTitle">Time Grouper</h1>
+        <p>Time series data has become of increasing interest, and is valuable mainly for reasoning about trends in whatever data dimension the time series is tracking the changes of over time. TimeGrouper is a visualization tool for time series clustering. It leverages machine learning techniques in order to cluster and visualize large datasets of small time series data, based on their trends, or features. More specifically, we have developed this tool in the context of searching for the contributing factors to the global decay rate of security vulnerabilities.</p>
+        <p>To begin, get the similarity data by selecting a similarity metric and clustering method and selecting additional filters (step 1). In the summary matrix, select a region of interest to generate a detailed similarity matrix (step 2). In the similarity matrix, select a region of interest to generate a time series chart (step 3). Finally, you can analyze the time series by zooming and panning and by applying filters to the chart (step 4).</p>
+        <div class="center">
+            <a href="https://wiki.cs.umd.edu/cmsc734_s15/index.php/TimeGrouper:_Visualizing_the_Global_Decay_of_Vulnerabilities">Project Wiki</a>
+            <span class="linkDividers"> | </span>
+            <a href="https://wiki.cs.umd.edu/cmsc734_s15/images/5/59/Timegrouper-visualizing-time.pdf">Report</a>
+            <span class="linkDividers"> | </span>
+            <a href="https://www.youtube.com/watch?v=oDgl6pp1CVU&feature=youtu.be">Video Demo</a>
+        </div>
+        <!-- end center -->
+    </div>
+    <br />
+    <div ng-show='isLoading'>
+        Loading {{loading}} / {{maxLoading}}
+        <progressbar value='loading' max='15'> </progressbar>
+    </div>
+    <div id="divDataFiltersAndAbout">
+        <div id="divDataFilters">
+            <h3> 1. Get the similarity data </h3>
+            <label><strong>Similarity Metric</strong>:
+                <br />
+                <select ng-model="simMetric" ng-options="s as s.name for s in simMetrics">
+                </select>
+            </label>
+            {{simMetric.detail}}
+            <!-- TODO: I think we should remove this -->
+            <br/>
+            <br />
+            <label><strong>Clustering Method</strong>:
+                <br />
+                <select ng-model="algorithm" ng-options="a as a.name for a in algorithms">
+                </select>
+            </label>{{algorithm.detail}}
+            <br/>
+            <br />
+            <table id="tblFilters">
+                <tr>
+                    <td rowspan="2">
+                        <strong>Applications</strong>:
+                        <br />
+                        <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNames()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNames()">None</a>
+                        <br />
+                        <div class="divCheckboxes">
+                            <label ng-repeat='(appName,enabled) in appNames'>
+                                <input type="checkbox" ng-model='appNames[appName]' /> {{appName}}
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>Update Mechanism</strong>:
+                        <br />
+                        <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanisms()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanisms()">None</a>
+                        <br />
+                        <div class="divCheckboxes">
+                            <label ng-repeat='updateMechanism in updateMechanisms'>
+                                <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Exploitable</strong>:
+                        <br />
+                        <label>
+                            <input type="radio" ng-model='exploitableOnly' ng-value="false" /> All</label>
+                        <br/>
+                        <label>
+                            <input type="radio" ng-model='exploitableOnly' ng-value="true" /> Only exploitable</label>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <button ng-click="loadData()" class="button">
+                Get Similarity Data and Generate Summary Matrix
+            </button>
+        </div>
+        <!-- end divDataFilters -->
+    </div>
+    <!-- end divDataFiltersAndAbout -->
+    <div id="divCharts">
+        <h3>
 2. Summary Matrix 
 <img id="imgHelpSummary" src="images/help.png" alt="summary matrix tooltip" onclick="showToolTip('The summary matrix shows an overview of the similarity matrix. Select a region of interest to generate the detailed similarity matrix and proceed to step 3.');" />
 </h3>
-
-<div summarymatrix class="overview" similarity="summaryMatrix" orderlist="summaryOrderList" selectednames="selectedGroups" myorder='summaryOrder' selectedrange='summaryRange'></div>
-<div ng-show='noSummary'>
-    Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
-</div>
-
-<h3>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
+        <div ng-show='isQRcodeVisible'>
+            QR code for the linked window
+            <br>
+            <a href={{qrcodeURL}}>{{qrcodeURL}}</a>
+            <br>
+            <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeURL}} href={{qrcodeURL}}></qrcode>
+        </div>
+        <div summarymatrix class="overview" similarity="summaryMatrix" orderlist="summaryOrderList" selectednames="selectedGroups" myorder='summaryOrder' selectedrange='summaryRange'></div>
+        <div ng-show='noSummary'>
+            Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
+        </div>
+        <h3>
 3. Similarity Matrix 
 <img src="images/help.png" alt="similarity matrix tooltip" onclick="showToolTip('The similarity matrix shows similarities between pairs of patches. Select a region of interest to generate the time series chart and proceed to step 4.');" />
-</h3>
-{{currentbrush}}
-<div similaritymatrix class="overview" similarity="simMatrix" orderlist="orderList" selectednames="selectedNames" myorder='myorder' highlight='appNamesHighlight' labelinfo="labelinfo" currentbrush='currentbrush'></div>
-
-
-<strong>Highlight Applications</strong>:<br />
-				<a href="" class="btn btn-link btn-default" ng-click="selectAllAppNamesHighlight()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNamesHighlight()">None</a><br /><br />
-                <label ng-repeat='(appName,enabled) in appNamesHighlight'>
-                    <input type="checkbox" ng-model='appNamesHighlight[appName]' /> {{appName}}
-                </label>
-    
-<h3>4. Selected TimeSeries</h3>
-
-<div id="divTSFilter">
-
-<strong>Update Mechanism</strong>:<br />
-<a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanismsTimeSeries()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanismsTimeSeries()">None</a><br /><br />
-<label ng-repeat='updateMechanism in updateMechanismsForTimeSeries'>
-  <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
-</label>
-
-<br /><br />
-
-<strong>Exploitable</strong>:<br />
-<label>
-  <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="false" /> All 
-</label> <br/>
-
-<label>
-  <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="true" /> Only exploitable 
-</label> <br/>
-
-<h4> Red selected regions</h4>
-<nvd3 options='lineOptions' data='lineData1'></nvd3>
-<h4> Blue selected regions </h4>
-<nvd3 options='lineOptions' data='lineData2'></nvd3>
-
-<div ng-show='showTimeSeries'></div>
-
-</div><!-- end divTSFilter -->
-</div><!-- end divCharts -->
-
-</div><!-- end divContainer -->
+</h3> {{currentbrush}}
+        <div similaritymatrix class="overview" similarity="simMatrix" orderlist="orderList" selectednames="selectedNames" myorder='myorder' highlight='appNamesHighlight' labelinfo="labelinfo" currentbrush='currentbrush'></div>
+        <strong>Highlight Applications</strong>:
+        <br />
+        <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNamesHighlight()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNamesHighlight()">None</a>
+        <br />
+        <br />
+        <label ng-repeat='(appName,enabled) in appNamesHighlight'>
+            <input type="checkbox" ng-model='appNamesHighlight[appName]' /> {{appName}}
+        </label>
+        <h3>4. Selected TimeSeries</h3>
+        <div id="divTSFilter">
+            <strong>Update Mechanism</strong>:
+            <br />
+            <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanismsTimeSeries()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanismsTimeSeries()">None</a>
+            <br />
+            <br />
+            <label ng-repeat='updateMechanism in updateMechanismsForTimeSeries'>
+                <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
+            </label>
+            <br />
+            <br />
+            <strong>Exploitable</strong>:
+            <br />
+            <label>
+                <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="false" /> All
+            </label>
+            <br/>
+            <label>
+                <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="true" /> Only exploitable
+            </label>
+            <br/>
+            <h4> Red selected regions</h4>
+            <nvd3 options='lineOptions' data='lineData1'></nvd3>
+            <h4> Blue selected regions </h4>
+            <nvd3 options='lineOptions' data='lineData2'></nvd3>
+            <div ng-show='showTimeSeries'></div>
+        </div>
+        <!-- end divTSFilter -->
+    </div>
+    <!-- end divCharts -->
+</div>
+<!-- end divContainer -->

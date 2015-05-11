@@ -273,7 +273,7 @@ angular.module('timegrouperApp')
                             .on("mouseover", mouseover)
                             .on("mouseout", mouseout);
 
-                        console.log(columnIndex);
+                        // console.log(columnIndex);
                     }
 
                     function mouseover(p) {
