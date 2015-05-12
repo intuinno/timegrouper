@@ -122,56 +122,64 @@ function showToolTip(message) {
     <div id="divDataFiltersAndAbout">
         <div id="divDataFilters">
             <h3> 1. Get the similarity data </h3>
-            <label><strong>Similarity Metric</strong>:
+            <div class="well">
+                <label><strong>Similarity Metric</strong>:
+                    <br />
+                    <select ng-model="simMetric" ng-options="s as s.name for s in simMetrics">
+                    </select>
+                </label>
+                {{simMetric.detail}}
+                <!-- TODO: I think we should remove this -->
+                <br/>
                 <br />
-                <select ng-model="simMetric" ng-options="s as s.name for s in simMetrics">
-                </select>
-            </label>
-            {{simMetric.detail}}
-            <!-- TODO: I think we should remove this -->
-            <br/>
-            <br />
-            <label><strong>Clustering Method</strong>:
-                <br />
-                <select ng-model="algorithm" ng-options="a as a.name for a in algorithms">
-                </select>
-            </label>{{algorithm.detail}}
+                <label><strong>Clustering Method</strong>:
+                    <br />
+                    <select ng-model="algorithm" ng-options="a as a.name for a in algorithms">
+                    </select>
+                </label>{{algorithm.detail}}
+            </div>
             <br/>
             <br />
             <table id="tblFilters">
                 <tr>
                     <td rowspan="2">
-                        <strong>Applications</strong>:
-                        <br />
-                        <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNames()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNames()">None</a>
-                        <br />
-                        <div class="divCheckboxes">
-                            <label ng-repeat='(appName,enabled) in appNames'>
-                                <input type="checkbox" ng-model='appNames[appName]' /> {{appName}}
-                            </label>
+                        <div class="well">
+                            <strong>Applications</strong>:
+                            <br />
+                            <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNames()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNames()">None</a>
+                            <br />
+                            <div class="divCheckboxes">
+                                <label ng-repeat='(appName,enabled) in appNames'>
+                                    <input type="checkbox" ng-model='appNames[appName]' /> {{appName}}
+                                </label>
+                            </div>
                         </div>
                     </td>
                     <td>
-                        <strong>Update Mechanism</strong>:
-                        <br />
-                        <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanisms()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanisms()">None</a>
-                        <br />
-                        <div class="divCheckboxes">
-                            <label ng-repeat='updateMechanism in updateMechanisms'>
-                                <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
-                            </label>
+                        <div class="well">
+                            <strong>Update Mechanism</strong>:
+                            <br />
+                            <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanisms()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanisms()">None</a>
+                            <br />
+                            <div class="divCheckboxes">
+                                <label ng-repeat='updateMechanism in updateMechanisms'>
+                                    <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
+                                </label>
+                            </div>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <strong>Exploitable</strong>:
-                        <br />
-                        <label>
-                            <input type="radio" ng-model='exploitableOnly' ng-value="false" /> All</label>
-                        <br/>
-                        <label>
-                            <input type="radio" ng-model='exploitableOnly' ng-value="true" /> Only exploitable</label>
+                        <div class="well">
+                            <strong>Exploitable</strong>:
+                            <br />
+                            <label>
+                                <input type="radio" ng-model='exploitableOnly' ng-value="false" /> All</label>
+                            <br/>
+                            <label>
+                                <input type="radio" ng-model='exploitableOnly' ng-value="true" /> Only exploitable</label>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -192,10 +200,44 @@ function showToolTip(message) {
         <label class="btn btn-success" ng-model="isSummaryVisible" btn-radio="false" >Hide</label>
     </div>
 </h3>
-<div ng-show='isSummaryVisible'>
+        <div ng-show='isSummaryVisible'>
+            <a class="btn btn-default btn-link" ng-click="launchSession(openNewWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
+            <a class="btn btn-default btn-link" ng-click="launchSession(openNewQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
+            <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
+            <div ng-show='isQRcodeVisible'>
+                QR code for the linked window
+                <br>
+                <a href={{qrcodeURL}}>{{qrcodeURL}}</a>
+                <br>
+                <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeURL}} href={{qrcodeURL}}></qrcode>
+            </div>
+            <div summarymatrix class="overview" similarity="summaryMatrix" orderlist="summaryOrderList" selectednames="selectedGroups" myorder='summaryOrder' selectedrange='summaryRange'></div>
+            <div ng-show='noSummary'>
+                Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
+            </div>
+        </div>
+        <h3>
 
-        <a class="btn btn-default btn-link" ng-click="launchSession(openNewWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
-        <a class="btn btn-default btn-link" ng-click="launchSession(openNewQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
+3. Similarity Matrix 
+<img src="images/help.png" alt="similarity matrix tooltip" onclick="showToolTip('The similarity matrix shows similarities between pairs of patches. Select a region of interest to generate the time series chart and proceed to step 4.');" />
+</h3>
+        <div similaritymatrix class="overview" similarity="simMatrix" orderlist="orderList" selectednames="selectedNames" myorder='myorder' highlight='appNamesHighlight' labelinfo="labelinfo" currentbrush='currentbrush'></div>
+        <div class="well">
+            <strong>Highlight Applications</strong>:
+            <br />
+            <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNamesHighlight()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNamesHighlight()">None</a>
+            <br />
+            <br />
+            <label ng-repeat='(appName,enabled) in appNamesHighlight'>
+                <input type="checkbox" ng-model='appNamesHighlight[appName]' /> {{appName}}
+            </label>
+        </div>
+        <h3>4. Selected TimeSeries<div class="btn-group">
+                        <label class="btn btn-success" ng-model="showTimeSeries" btn-radio="true">Show</label>
+                        <label class="btn btn-success" ng-model="showTimeSeries" btn-radio="false">Hide</label>
+                    </div></h3>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewLineWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
+        <a class="btn btn-default btn-link" ng-click="launchSession(openNewLineQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
         <div ng-show='isQRcodeVisible'>
             QR code for the linked window
@@ -204,56 +246,45 @@ function showToolTip(message) {
             <br>
             <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeURL}} href={{qrcodeURL}}></qrcode>
         </div>
-        <div summarymatrix class="overview" similarity="summaryMatrix" orderlist="summaryOrderList" selectednames="selectedGroups" myorder='summaryOrder' selectedrange='summaryRange'></div>
-        <div ng-show='noSummary'>
-            Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
+        <div id="divTSFilter" ng-show='showTimeSeries'>
+            <div>
+                <div class="redchart">
+                    <h4> Red selected regions</h4>
+                    <div >
+                        <nvd3 options='lineOptions' data='lineData1'></nvd3>
+                    </div>
+                </div>
+                <div class="bluechart">
+                    <h4> Blue selected regions </h4>
+                    <div >
+                        <nvd3 options='lineOptions' data='lineData2'></nvd3>
+                    </div>
+                </div>
+                <div class='well'>
+                    <strong>Update Mechanism</strong>:
+                    <br />
+                    <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanismsTimeSeries()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanismsTimeSeries()">None</a>
+                    <br />
+                    <br />
+                    <label ng-repeat='updateMechanism in updateMechanismsForTimeSeries'>
+                        <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
+                    </label>
+                    <br />
+                    <br />
+                    <strong>Exploitable</strong>:
+                    <br />
+                    <label>
+                        <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="false" /> All
+                    </label>
+                    <br/>
+                    <label>
+                        <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="true" /> Only exploitable
+                    </label>
+                    <br/>
+                </div>
+            </div>
+            <!-- end divTSFilter -->
         </div>
-</div>
-
-        <h3>
-
-3. Similarity Matrix 
-<img src="images/help.png" alt="similarity matrix tooltip" onclick="showToolTip('The similarity matrix shows similarities between pairs of patches. Select a region of interest to generate the time series chart and proceed to step 4.');" />
-</h3> {{currentbrush}}
-        <div similaritymatrix class="overview" similarity="simMatrix" orderlist="orderList" selectednames="selectedNames" myorder='myorder' highlight='appNamesHighlight' labelinfo="labelinfo" currentbrush='currentbrush'></div>
-        <strong>Highlight Applications</strong>:
-        <br />
-        <a href="" class="btn btn-link btn-default" ng-click="selectAllAppNamesHighlight()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllAppNamesHighlight()">None</a>
-        <br />
-        <br />
-        <label ng-repeat='(appName,enabled) in appNamesHighlight'>
-            <input type="checkbox" ng-model='appNamesHighlight[appName]' /> {{appName}}
-        </label>
-        <h3>4. Selected TimeSeries</h3>
-        <div id="divTSFilter">
-            <strong>Update Mechanism</strong>:
-            <br />
-            <a href="" class="btn btn-link btn-default" ng-click="selectAllUpdateMechanismsTimeSeries()">All</a> | <a href="" class="btn btn-link btn-default" ng-click="deselectAllUpdateMechanismsTimeSeries()">None</a>
-            <br />
-            <br />
-            <label ng-repeat='updateMechanism in updateMechanismsForTimeSeries'>
-                <input type="checkbox" ng-model='updateMechanism.selected' /> {{updateMechanism.label}}
-            </label>
-            <br />
-            <br />
-            <strong>Exploitable</strong>:
-            <br />
-            <label>
-                <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="false" /> All
-            </label>
-            <br/>
-            <label>
-                <input type="radio" ng-model='exploitableOnlyForTimeSeries' ng-value="true" /> Only exploitable
-            </label>
-            <br/>
-            <h4> Red selected regions</h4>
-            <nvd3 options='lineOptions' data='lineData1'></nvd3>
-            <h4> Blue selected regions </h4>
-            <nvd3 options='lineOptions' data='lineData2'></nvd3>
-            <div ng-show='showTimeSeries'></div>
-        </div>
-        <!-- end divTSFilter -->
+        <!-- end divCharts -->
     </div>
-    <!-- end divCharts -->
-</div>
-<!-- end divContainer -->
+    <!-- end divContainer -->

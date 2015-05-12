@@ -80,9 +80,14 @@ angular.module('timegrouperApp')
             reloadOnSearch: false
         })
         .when('/summary/:session?', {
-            templateUrl: 'views/summary.html', 
+            templateUrl: 'views/summary.html',
             controller: 'SummaryCtrl',
-            reloadOnSearch: false 
+            reloadOnSearch: false
+        })
+        .when('/line/:session?', {
+            templateUrl: 'views/linechart.html',
+            controller: 'LinechartCtrl',
+            reloadOnSearch: false
         })
         .whenAuthenticated('/account', {
             templateUrl: 'views/account.html',

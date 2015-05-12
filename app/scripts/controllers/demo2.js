@@ -11,6 +11,17 @@ angular.module('timegrouperApp')
     .controller('Demo2Ctrl', function($scope, $http, $firebaseObject, $firebaseArray, $location, $routeParams, $q, FBURL) {
 
         var summaryMatLabel, summaryMat, originalLabel, originalMat;
+        $scope.showTimeSeries = false;
+        $scope.dimsumLabel = {
+            labelinfo: [-1]
+        };
+        $scope.dimsumPatch = {
+            redArrayNames: [-1],
+            blueArrayNames: [-1],
+            currentbrush: 0
+
+        };
+
         $scope.summaryRange = [];
         $scope.isSummaryVisible = true;
         $scope.simMetrics = [{
@@ -255,6 +266,8 @@ angular.module('timegrouperApp')
 
 
                     }
+
+                    $scope.dimsumLabel.labelinfo = $scope.labelinfo;
                 })
                 .error(function(data, status, headers, config) {
                     console.log(status);
@@ -419,6 +432,20 @@ angular.module('timegrouperApp')
                 return;
             }
 
+            if ($scope.currentbrush === 0) {
+
+
+                $scope.dimsumPatch.redArrayNames = $scope.selectedNames;
+                $scope.dimsumPatch.currentbrush = 'red';
+
+            } else if ($scope.currentbrush === 1) {
+
+                $scope.dimsumPatch.blueArrayNames = $scope.selectedNames;
+                $scope.dimsumPatch.currentbrush = 'blue';
+            }
+
+
+
             updatePatches();
 
 
@@ -491,7 +518,7 @@ angular.module('timegrouperApp')
 
             var selectedPatches = [];
 
-            if (!newVals || newVals.arrayNames.length  === 1) {
+            if (!newVals || newVals.arrayNames.length === 1) {
                 return;
             }
 
@@ -652,7 +679,9 @@ angular.module('timegrouperApp')
 
 
         var sessionID;
-        $scope.selectedGroups = {arrayNames:[-1]};
+        $scope.selectedGroups = {
+            arrayNames: [-1]
+        };
 
 
         $scope.launchSession = function(handler) {
@@ -707,6 +736,16 @@ angular.module('timegrouperApp')
 
         };
 
+        $scope.openNewLineWindow = function(sessionID) {
+
+            var url = '#/line/';
+            url = url + '?session=';
+            url = url + sessionID;
+
+            window.open(url, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=800, left=500, width=800, height=600");
+
+        };
+
         $scope.openNewInspector = function(sessionID) {
 
             var url = '#/inspect/' + $routeParams.csvKey;
@@ -719,7 +758,16 @@ angular.module('timegrouperApp')
 
         $scope.openNewQR = function(sessionID) {
 
-            var url = $location.absUrl();
+            var url = $location.protocol() + '://' + $location.host() + '/#/summary/?session=' + sessionID;
+
+            $scope.qrcodeURL = url;
+            $scope.isQRcodeVisible = true;
+
+        };
+
+        $scope.openNewLineQR = function(sessionID) {
+
+            var url = $location.protocol() + '://' + $location.host() + '/#/line/?session=' + sessionID
 
             $scope.qrcodeURL = url;
             $scope.isQRcodeVisible = true;
@@ -735,7 +783,14 @@ angular.module('timegrouperApp')
                     dummy: 1,
                     simSelection: [],
                     summaryMat: [-1],
-                    orderlist: [-1]
+                    orderlist: [-1],
+                    selectedNames: {
+                        redArrayNames: [-1],
+                        blueArrayNames: [-1]
+                    },
+                    labelinfo: {
+                        labelinfo: [-1]
+                    }
                 }
 
                 var ref = new Firebase(FBURL + '/sessions/');
@@ -751,11 +806,20 @@ angular.module('timegrouperApp')
                         parentObj.summarySelection = $scope.selectedGroups;
                         parentObj.summaryMat = $scope.summaryMatrix;
                         parentObj.orderlist = $scope.summaryOrderList;
+                        parentObj.labelinfo = $scope.dimsumLabel;
+                        parentObj.selectedNames = $scope.dimsumPatch;
 
                         parentObj.$save().then(function(newChildRef) {
 
                             var obj = $firebaseObject(newChildRef.child('summarySelection'));
-                            obj.$bindTo($scope,'selectedGroups');
+                            obj.$bindTo($scope, 'selectedGroups');
+
+                            var objPatches = $firebaseObject(newChildRef.child('selectedNames'));
+                            objPatches.$bindTo($scope, 'dimsumPatch');
+
+                            var dimsumLableInfo = $firebaseObject(newChildRef.child('labelinfo'));
+                            dimsumLableInfo.$bindTo($scope, 'dimsumLabel');
+
 
                             var objSumMat = $firebaseArray(newChildRef.child('summaryMat'));
                             // objSumMat.$bindTo($scope, "summaryMatrix");

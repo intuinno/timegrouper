@@ -1,3 +1,11 @@
+.redchart {
+  border: 2px solid red;
+}
+
+.bluechart {
+  border: 2px solid blue;
+}
+
 svg.matrix {
   width:880px;
   height:810px;
