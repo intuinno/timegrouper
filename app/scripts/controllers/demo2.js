@@ -769,8 +769,8 @@ angular.module('timegrouperApp')
 
             var url = $location.protocol() + '://' + $location.host() + '/#/line/?session=' + sessionID
 
-            $scope.qrcodeURL = url;
-            $scope.isQRcodeVisible = true;
+            $scope.qrcodeLineURL = url;
+            $scope.isLineQRcodeVisible = true;
 
         };
 

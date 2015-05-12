@@ -102,19 +102,10 @@ function showToolTip(message) {
 <div id="divContainer">
     <div id="helpDialog" title="Tool Tip" class="hide">This is a tool tip</div>
     <div id="divAbout">
-        <h1 id="projectTitle">Time Grouper</h1>
-        <p>Time series data has become of increasing interest, and is valuable mainly for reasoning about trends in whatever data dimension the time series is tracking the changes of over time. TimeGrouper is a visualization tool for time series clustering. It leverages machine learning techniques in order to cluster and visualize large datasets of small time series data, based on their trends, or features. More specifically, we have developed this tool in the context of searching for the contributing factors to the global decay rate of security vulnerabilities.</p>
+        
         <p>To begin, get the similarity data by selecting a similarity metric and clustering method and selecting additional filters (step 1). In the summary matrix, select a region of interest to generate a detailed similarity matrix (step 2). In the similarity matrix, select a region of interest to generate a time series chart (step 3). Finally, you can analyze the time series by zooming and panning and by applying filters to the chart (step 4).</p>
-        <div class="center">
-            <a href="https://wiki.cs.umd.edu/cmsc734_s15/index.php/TimeGrouper:_Visualizing_the_Global_Decay_of_Vulnerabilities">Project Wiki</a>
-            <span class="linkDividers"> | </span>
-            <a href="https://wiki.cs.umd.edu/cmsc734_s15/images/5/59/Timegrouper-visualizing-time.pdf">Report</a>
-            <span class="linkDividers"> | </span>
-            <a href="https://www.youtube.com/watch?v=oDgl6pp1CVU&feature=youtu.be">Video Demo</a>
-        </div>
         <!-- end center -->
     </div>
-    <br />
     <div ng-show='isLoading'>
         Loading {{loading}} / {{maxLoading}}
         <progressbar value='loading' max='15'> </progressbar>
@@ -239,12 +230,12 @@ function showToolTip(message) {
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewLineWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewLineQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
-        <div ng-show='isQRcodeVisible'>
+        <div ng-show='isLineQRcodeVisible'>
             QR code for the linked window
             <br>
-            <a href={{qrcodeURL}}>{{qrcodeURL}}</a>
+            <a href={{qrcodeLineURL}}>{{qrcodeLineURL}}</a>
             <br>
-            <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeURL}} href={{qrcodeURL}}></qrcode>
+            <qrcode version="7" error-correction-level="M" size="210" data={{qrcodeLineURL}} href={{qrcodeLineURL}}></qrcode>
         </div>
         <div id="divTSFilter" ng-show='showTimeSeries'>
             <div>
