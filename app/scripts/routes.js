@@ -81,7 +81,7 @@ angular.module('timegrouperApp')
         })
         .when('/summary/:session?', {
             templateUrl: 'views/summary.html', 
-            controller: 'summaryCtrl',
+            controller: 'SummaryCtrl',
             reloadOnSearch: false 
         })
         .whenAuthenticated('/account', {

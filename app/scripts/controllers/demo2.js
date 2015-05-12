@@ -12,6 +12,7 @@ angular.module('timegrouperApp')
 
         var summaryMatLabel, summaryMat, originalLabel, originalMat;
         $scope.summaryRange = [];
+        $scope.isSummaryVisible = true;
         $scope.simMetrics = [{
             name: 'euclidean',
             detail: 'euclidean distance based on input data'
@@ -490,12 +491,12 @@ angular.module('timegrouperApp')
 
             var selectedPatches = [];
 
-            if (!newVals || newVals.length === 1) {
+            if (!newVals || newVals.arrayNames.length  === 1) {
                 return;
             }
 
-            for (var i = 0; i < newVals.length; i++) {
-                var j = parseInt(newVals[i].slice(5));
+            for (var i = 0; i < newVals.arrayNames.length; i++) {
+                var j = parseInt(newVals.arrayNames[i].slice(5));
 
                 if (!isNaN(j)) {
                     var patches = summaryMatLabel[j].patches;
@@ -651,7 +652,7 @@ angular.module('timegrouperApp')
 
 
         var sessionID;
-        $scope.selectedGroups = ['none'];
+        $scope.selectedGroups = {arrayNames:[-1]};
 
 
         $scope.launchSession = function(handler) {
@@ -754,7 +755,7 @@ angular.module('timegrouperApp')
                         parentObj.$save().then(function(newChildRef) {
 
                             var obj = $firebaseObject(newChildRef.child('summarySelection'));
-                            obj.$bindTo($scope, "selectedGroups");
+                            obj.$bindTo($scope,'selectedGroups');
 
                             var objSumMat = $firebaseArray(newChildRef.child('summaryMat'));
                             // objSumMat.$bindTo($scope, "summaryMatrix");

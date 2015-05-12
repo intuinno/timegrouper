@@ -83,7 +83,9 @@ angular.module('timegrouperApp')
                     } else if (newVals.length === 1) {
 
                         return;
-                    } 
+                    } else if (!scope.similarity || !scope.orderlist){
+                        return;
+                    }
 
 
                     renderDataChange(scope.similarity, scope.orderlist);
@@ -248,15 +250,15 @@ angular.module('timegrouperApp')
                             .enter().append("rect")
                             .attr("class", function(d, i) {
 
-                                if (!scope.selectednames || scope.selectednames.length === 0) {
+                                if (!scope.selectednames.arrayNames || scope.selectednames.arrayNames.length === 0) {
                                     return 'cell';
                                 } else {
 
                                     var base = 'cell selecting';
 
-                                    if (typeof scope.selectednames.indexOf === "function") {
+                                    if (typeof scope.selectednames.arrayNames.indexOf === "function") {
 
-                                        if (scope.selectednames.indexOf((scope.orderlist[d.x]).name) !== -1 && scope.selectednames.indexOf((scope.orderlist[d.y]).name) !== -1) {
+                                        if (scope.selectednames.arrayNames.indexOf((scope.orderlist[d.x]).name) !== -1 && scope.selectednames.arrayNames.indexOf((scope.orderlist[d.y]).name) !== -1) {
 
                                             base = base + '  selected';
                                         }
@@ -367,7 +369,7 @@ angular.module('timegrouperApp')
                         // x.invert(extent0[1][1]);
 
 
-                        scope.selectednames = selectedNames;
+                        scope.selectednames.arrayNames = selectedNames;
                         scope.selectedrange = [p1, p2];
                         // console.log(selectedNames);
                         scope.$apply();

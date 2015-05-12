@@ -187,7 +187,13 @@ function showToolTip(message) {
         <h3>
 2. Summary Matrix 
 <img id="imgHelpSummary" src="images/help.png" alt="summary matrix tooltip" onclick="showToolTip('The summary matrix shows an overview of the similarity matrix. Select a region of interest to generate the detailed similarity matrix and proceed to step 3.');" />
+<div class="btn-group">
+        <label class="btn btn-success" ng-model="isSummaryVisible" btn-radio="true" >Show</label>
+        <label class="btn btn-success" ng-model="isSummaryVisible" btn-radio="false" >Hide</label>
+    </div>
 </h3>
+<div ng-show='isSummaryVisible'>
+
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewWindow)" title="Open a linked window" id="toolbarSession"><i class="fa fa-external-link"></i> Popup</a>
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewQR)" title="Open a QR code for linked window" id="toolbarSession"><i class="fa fa-qrcode"></i> QR code</a>
         <a class="btn btn-default btn-link" ng-click="launchSession(openNewInspector)" title="Open an Inspector to examine selected value" id="toolbarInspector"><i class="fa fa-table"></i> Inspector</a>
@@ -202,7 +208,10 @@ function showToolTip(message) {
         <div ng-show='noSummary'>
             Because the number of nodes are small, there is no summary matrix. Use similarity matrix below.
         </div>
+</div>
+
         <h3>
+
 3. Similarity Matrix 
 <img src="images/help.png" alt="similarity matrix tooltip" onclick="showToolTip('The similarity matrix shows similarities between pairs of patches. Select a region of interest to generate the time series chart and proceed to step 4.');" />
 </h3> {{currentbrush}}

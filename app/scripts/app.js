@@ -21,4 +21,5 @@ angular.module('timegrouperApp', [
     'nvd3',
     'angular-loading-bar',
     'ui.bootstrap',
+    'monospaced.qrcode'
   ]);
